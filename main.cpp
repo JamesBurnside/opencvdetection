@@ -93,7 +93,7 @@ vector<state> feature_states =
     TONGUE,
     OPEN,
     SUNGLASSES
-}
+};
 
 vector<int> types =
 {
@@ -160,13 +160,9 @@ void GetReccct(Mat img, bounding b)
     rectangle(img, Point(b.x,b.y), Point(b.x+b.width,b.y+b.height), Scalar(0,0,0), 2, 8, 0);
 }
 
-vector<int> inverse_feature_vals
+vector<int> inverse_feature_vals =
 {
-    3,
-    5,
-    5,
-    3,
-    1
+    3, 5, 5, 3, 1
 };
 
 int main(int argc, const char **argv)
@@ -236,6 +232,8 @@ int main(int argc, const char **argv)
         assert(minimum_num != -1);
 
         printf("Feature %i classified as image %s\n", i, images[inverse_feature_vals[minimum_num]].c_str());
+
+        printf("Feature %i min %i classified as %i\n", i, minimum_num, feature_states[minimum_num]);
 
         feature_nums[i] = minimum_num;
     }
