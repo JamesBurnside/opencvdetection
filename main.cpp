@@ -71,6 +71,8 @@ vector<Vec3f> feature_vals =
     0
 };
 
+
+
 vector<int> types =
 {
     0,
@@ -159,8 +161,6 @@ int main(int argc, const char **argv)
     GetReccct(mat,boundings[0]);
     GetReccct(mat,boundings[1]);
     GetReccct(mat,boundings[2]);
-
-    face_features feat;
 
     for(int i=0; i<FEATURES; i++)
     {
