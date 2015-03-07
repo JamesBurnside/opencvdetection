@@ -69,18 +69,26 @@ Mat get_matrix(int image)
 Vec3f get_sum_val(Mat& mat, int type)
 {
     Vec3f sum = 0;
+    int num = 0;
 
-    for(int j=MOUTH_BOX_Y; j<MOUTH_BOX_Y + MOUTH_BOX_HEIGHT; j++)
+    assert(type >= 0 && type < boundings.size());
+
+    for(int j=boundings[type].y; j<boundings[type].y + boundings[type].height; j++)
     {
-        for(int i=MOUTH_BOX_X; i<MOUTH_BOX_X + MOUTH_BOX_WIDTH; i++)
+        for(int i=boundings[type].x; i<boundings[type].x + boundings[type].width; i++)
         {
             Vec3b val = mat.at<Vec3b>(j, i);
 
+            //mat.at<Vec3b>(j, i) = 0;
+
             sum += val;
+            num++;
         }
     }
 
-    return sum;
+    assert(num != 0);
+
+    return sum / num;
 }
 void GetReccct(Mat img, bounding b)
 {
@@ -112,4 +120,3 @@ int main(int argc, const char **argv)
     getchar();
 #endif
 }
-
