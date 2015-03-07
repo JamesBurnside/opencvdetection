@@ -49,8 +49,6 @@ int main(int argc, const char **argv)
 
     //namedWindow( "Display window", WINDOW_AUTOSIZE );
 
-    imshow( "Display window", mat );
-
-    getchar();
+    imwrite( "I literally hate opencv.png", mat );
 }
 
