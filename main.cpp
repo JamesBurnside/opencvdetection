@@ -12,17 +12,30 @@
 #include <utility>
 #include <math.h>
 
-
 #define MOUTH_BOX_WIDTH 200
 #define MOUTH_BOX_HEIGHT 160
-
 #define MOUTH_BOX_X 400
 #define MOUTH_BOX_Y 780
+
+#define EYE_BOX_WIDTH 130
+#define EYE_BOX_HEIGHT 90
+#define EYE_BOX_LEFT_X 330
+#define EYE_BOX_RIGHT_X 540
+#define EYE_BOX_Y 565
 
 using namespace cv;
 using namespace std;
 
 string base = "jamesimages/";
+
+struct bounding
+{
+    int x, y, width, height;
+};
+
+bounding eyeLeftRect = {EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
+         eyeRightRect = {EYE_BOX_RIGHT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
+         mouthRect = {MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT};
 
 vector<string> images =
 {
@@ -34,7 +47,6 @@ vector<string> images =
     "wink_smile.jpg",
     "wink_smile_super.jpg"
 };
-
 vector<Vec3f> region_vals;
 
 Mat get_matrix(int image)
@@ -61,13 +73,15 @@ Vec3f get_sum_val(Mat& mat)
         {
             Vec3b val = mat.at<Vec3b>(j, i);
 
-            mat.at<Vec3b>(j, i) = 0;
-
             sum += val;
         }
     }
 
     return sum;
+}
+void GetReccct(Mat img, bounding b)
+{
+    rectangle(img, Point(b.x,b.y), Point(b.x+b.width,b.y+b.height), Scalar(0,0,0), 2, 8, 0);
 }
 
 int main(int argc, const char **argv)
@@ -81,8 +95,9 @@ int main(int argc, const char **argv)
 
     Mat mat = get_matrix(3);
 
-    //draw bounding box:
-    rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
+    GetReccct(mat,eyeLeftRect);
+    GetReccct(mat,eyeRightRect);
+    GetReccct(mat,mouthRect);
 
     Vec3f sum_val = get_sum_val(mat);
 
