@@ -29,6 +29,12 @@ vector<string> images =
     "wink_smile_super.jpg"
 };
 
+#define MOUTH_BOX_WIDTH 200
+#define MOUTH_BOX_HEIGHT 160
+
+#define MOUTH_BOX_X 400
+#define MOUTH_BOX_Y 780
+
 int main(int argc, const char **argv)
 {
     printf("helloworld");
