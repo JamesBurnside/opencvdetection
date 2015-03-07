@@ -81,11 +81,6 @@ vector<int> types =
     0
 };
 
-struct face_features
-{
-    Vec3f f[3];
-};
-
 Mat get_matrix(int image)
 {
     Mat mat;
@@ -159,7 +154,7 @@ int main(int argc, const char **argv)
     feature_vals[4] = get_sum_val(image_mat[1], 2);
     //feature_vals[5] =
 
-    Mat mat = get_matrix(5);
+    Mat mat = get_matrix(4);
 
     GetReccct(mat,boundings[0]);
     GetReccct(mat,boundings[1]);
@@ -169,13 +164,10 @@ int main(int argc, const char **argv)
 
     for(int i=0; i<FEATURES; i++)
     {
-        feat.f[i] = get_sum_val(mat, i);
+        Vec3f feat = get_sum_val(mat, i);
 
-        printf("%f %f %f\n", feat.f[i][0], feat.f[i][1], feat.f[i][2]);
-    }
+        printf("%f %f %f\n", feat[0], feat[1], feat[2]);
 
-    for(int i=0; i<FEATURES; i++)
-    {
         int type = 0;
 
         if(i == 2)
@@ -189,7 +181,7 @@ int main(int argc, const char **argv)
             if(types[j] != type)
                 continue;
 
-            Vec3f my_val = feat.f[i];
+            Vec3f my_val = feat;
 
             Vec3f their_val = feature_vals[j];
 
@@ -212,8 +204,6 @@ int main(int argc, const char **argv)
     }
 
 
-
-    //Vec3f sum_val = get_sum_val(mat, 0);
 
 #ifdef RETARD
     imwrite( "I literally hate opencv.png", mat );
