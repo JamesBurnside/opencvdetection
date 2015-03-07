@@ -26,6 +26,18 @@
 using namespace cv;
 using namespace std;
 
+enum emoji
+{
+    E_NONE,
+    E_SMILE,
+    E_SUPER_SMILE,
+    E_TONGUE,
+    E_WINK,
+    E_SUPER_WINK,
+    E_TONGUE_WINK,
+    E_SUNGLASSES
+};
+
 enum state
 {
     OPEN = 0,
@@ -34,10 +46,11 @@ enum state
     SUNGLASSES = 3
 };
 
-enum emoji
+enum feature_type
 {
-    E_SMILE,E_SUPER_SMILE,E_TONGUE,E_WINK,E_SUPER_WINK,E_TONGUE_WINK,E_SUNGLASSES
-}
+    EYES,
+    MOUTH
+};
 
 string base = "jamesimages/";
 
@@ -84,16 +97,24 @@ vector<Vec3f> feature_vals =
     0
 };
 
-
-
-vector<int> types =
+vector<state> feature_states =
 {
-    0,
-    0,
-    1,
-    1,
-    1,
-    0
+    OPEN,
+    CLOSED,
+    CLOSED,
+    TONGUE,
+    OPEN,
+    SUNGLASSES
+};
+
+vector<feature_type> types =
+{
+    EYES,
+    EYES,
+    MOUTH,
+    MOUTH,
+    MOUTH,
+    EYES
 };
 
 Mat get_matrix(int image)
@@ -135,15 +156,80 @@ Vec3f get_sum_val(Mat& mat, int type)
     return sum / num;
 }
 
-emoji mapEmoji(state eye1, state eye2, state mouth)
+emoji mapEmoji(int features[3])
 {
-    switch(mouth)
+    state eye1_state, eye2_state, mouth_state;
+
+    eye1_state=feature_states[features[0]];
+    eye2_state=feature_states[features[1]];
+    mouth_state=feature_states[features[2]];
+
+    //if one is sunglasses and one isn't, assign both to be the opposite one
+    if(eye1_state != eye2_state)
     {
-        case OPEN:
-        case CLOSED:
-        case TONGUE:
-        default:
+        if(eye1_state == SUNGLASSES)
+            eye1_state = eye2_state;
+        else if(eye2_state == SUNGLASSES)
+            eye2_state = eye1_state;
     }
+
+    if(mouth_state == OPEN)
+    {
+        //wink - if both different or both closed
+        if(eye1_state != eye2_state || (eye1_state == CLOSED && eye2_state == CLOSED))
+        {
+            return E_SUPER_WINK;
+        }
+        //both open
+        else if(eye1_state == OPEN && eye2_state == OPEN)
+        {
+            return E_SUPER_SMILE;
+        }
+        //both sunglasses
+        else if(eye1_state == SUNGLASSES && eye2_state == SUNGLASSES)
+        {
+            return E_SUNGLASSES;
+        }
+    }
+    else if(mouth_state == CLOSED)
+    {
+        //wink - if both different or both closed
+        if(eye1_state != eye2_state || (eye1_state == CLOSED && eye2_state == CLOSED))
+        {
+            return E_WINK;
+        }
+        //both open
+        else if(eye1_state == OPEN && eye2_state == OPEN)
+        {
+            return E_SMILE;
+        }
+        //both sunglasses
+        else if(eye1_state == SUNGLASSES && eye2_state == SUNGLASSES)
+        {
+            return E_SUNGLASSES;
+        }
+    }
+    else if(mouth_state == TONGUE)
+    {
+        //wink - if both different or both closed
+        if(eye1_state != eye2_state || (eye1_state == CLOSED && eye2_state == CLOSED))
+        {
+            return E_TONGUE_WINK;
+        }
+        //both open
+        else if(eye1_state == OPEN && eye2_state == OPEN)
+        {
+            return E_TONGUE;
+        }
+        //both sunglasses
+        else if(eye1_state == SUNGLASSES && eye2_state == SUNGLASSES)
+        {
+            return E_SUNGLASSES;
+        }
+    }
+    
+    assert(false); //how'd we even get here??
+    return E_NONE;
 }
 
 void GetReccct(Mat img, bounding b)
@@ -186,6 +272,8 @@ int main(int argc, const char **argv)
     GetReccct(mat,boundings[1]);
     GetReccct(mat,boundings[2]);
 
+    int feature_nums[FEATURES] = {0};
+
     for(int i=0; i<FEATURES; i++)
     {
         Vec3f feat = get_sum_val(mat, i);
@@ -225,6 +313,8 @@ int main(int argc, const char **argv)
         assert(minimum_num != -1);
 
         printf("Feature %i classified as image %s\n", i, images[inverse_feature_vals[minimum_num]].c_str());
+
+        feature_nums[i] = minimum_num;
     }
 
 
