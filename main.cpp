@@ -12,11 +12,29 @@
 #include <utility>
 #include <math.h>
 
+#define MOUTH_BOX_WIDTH 200
+#define MOUTH_BOX_HEIGHT 160
+#define MOUTH_BOX_X 400
+#define MOUTH_BOX_Y 780
+
+#define EYE_BOX_WIDTH 130
+#define EYE_BOX_HEIGHT 90
+#define EYE_BOX_LEFT_X 590
+#define EYE_BOX_LEFT_Y 330
+#define EYE_BOX_RIGHT_X 545
+#define EYE_BOX_RIGHT_Y 580
+
 using namespace cv;
 using namespace std;
 
 string base = "jamesimages/";
 
+struct bounding
+{
+    int x, y, width, height;
+};
+
+bounding eyeLeftRect = {EYE_BOX_LEFT_X, EYE_BOX_LEFT_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT}, eyeRightRect, mouthRect;
 
 vector<string> images =
 {
@@ -29,21 +47,9 @@ vector<string> images =
     "wink_smile_super.jpg"
 };
 
-#define MOUTH_BOX_WIDTH 200
-#define MOUTH_BOX_HEIGHT 160
-#define MOUTH_BOX_X 400
-#define MOUTH_BOX_Y 780
-
-#define MOUTH_EYE_WIDTH 130
-#define MOUTH_EYE_HEIGHT 90
-#define MOUTH_EYE_LEFT_X 590
-#define MOUTH_EYE_LEFT_Y 330
-#define MOUTH_EYE_RIGHT_X 545
-#define MOUTH_EYE_RIGHT_Y 580
-
-void GetReccct(bounding booooooooom) 
+void GetReccct(Mat img, bounding b) 
 {
-
+    rectangle(img, Point(b.x,b.y), Point(b.x+b.width,b.y+b.height), Scalar(0,0,0), 2, 8, 0);  
 }
 
 int main(int argc, const char **argv)
@@ -70,6 +76,8 @@ int main(int argc, const char **argv)
     //eyes bounding box:
     rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
     rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
+
+
 
 
 #ifdef RETARD
