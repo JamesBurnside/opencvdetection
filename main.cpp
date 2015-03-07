@@ -71,16 +71,20 @@ vector<Vec3f> feature_vals =
     0
 };
 
-
+enum feature_type
+{
+    MOUTH,
+    TONGUE
+};
 
 vector<int> types =
 {
-    0,
-    0,
-    1,
-    1,
-    1,
-    0
+    MOUTH,
+    MOUTH,
+    TONGUE,
+    TONGUE,
+    TONGUE,
+    MOUTH
 };
 
 Mat get_matrix(int image)
