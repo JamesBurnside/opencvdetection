@@ -15,8 +15,11 @@
 using namespace cv;
 using namespace std;
 
-int main(int argc, const char **argv) 
+int main(int argc, const char **argv)
 {
     printf("helloworld");
+
+    Mat mat;
+    mat.create(10, 10, CV_32FC1);
 }
 
