@@ -33,6 +33,8 @@ struct bounding
     int x, y, width, height;
 };
 
+#define FEATURES 3
+
 vector<bounding> boundings =
 {
     {EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
@@ -50,7 +52,39 @@ vector<string> images =
     "wink_smile.jpg",
     "wink_smile_super.jpg"
 };
-vector<Vec3f> region_vals;
+
+vector<Mat> image_mat;
+
+vector<Vec3f> feature_vals =
+{
+    ///Eyes open
+    0,
+    ///Eyes closed
+    0,
+    ///Mouth closed
+    0,
+    ///Tongue out
+    0,
+    ///Mouth open
+    0,
+    ///Sunglasses
+    0
+};
+
+vector<int> types =
+{
+    0,
+    0,
+    1,
+    1,
+    1,
+    0
+};
+
+struct face_features
+{
+    Vec3f f[3];
+};
 
 Mat get_matrix(int image)
 {
@@ -90,27 +124,96 @@ Vec3f get_sum_val(Mat& mat, int type)
 
     return sum / num;
 }
+
 void GetReccct(Mat img, bounding b)
 {
     rectangle(img, Point(b.x,b.y), Point(b.x+b.width,b.y+b.height), Scalar(0,0,0), 2, 8, 0);
 }
 
+vector<int> inverse_feature_vals
+{
+    3,
+    5,
+    5,
+    3,
+    1
+};
+
 int main(int argc, const char **argv)
 {
-    printf("helloworld");
-
     for(auto& i : images)
     {
         i = base + i;
     }
 
-    Mat mat = get_matrix(3);
+    for(int i=0; i<images.size(); i++)
+    {
+        image_mat.push_back(get_matrix(i));
+    }
+
+
+    feature_vals[0] = (get_sum_val(image_mat[3], 0) + get_sum_val(image_mat[3], 1)) / 2.0f;
+    feature_vals[1] = get_sum_val(image_mat[5], 1);
+    feature_vals[2] = get_sum_val(image_mat[5], 2);
+    feature_vals[3] = get_sum_val(image_mat[3], 2);
+    feature_vals[4] = get_sum_val(image_mat[1], 2);
+    //feature_vals[5] =
+
+    Mat mat = get_matrix(5);
 
     GetReccct(mat,boundings[0]);
     GetReccct(mat,boundings[1]);
     GetReccct(mat,boundings[2]);
 
-    Vec3f sum_val = get_sum_val(mat, 0);
+    face_features feat;
+
+    for(int i=0; i<FEATURES; i++)
+    {
+        feat.f[i] = get_sum_val(mat, i);
+
+        printf("%f %f %f\n", feat.f[i][0], feat.f[i][1], feat.f[i][2]);
+    }
+
+    for(int i=0; i<FEATURES; i++)
+    {
+        int type = 0;
+
+        if(i == 2)
+            type = 1;
+
+        float minimum_difference = 999999999999999;
+        int minimum_num = -1;
+
+        for(int j=0; j<feature_vals.size(); j++)
+        {
+            if(types[j] != type)
+                continue;
+
+            Vec3f my_val = feat.f[i];
+
+            Vec3f their_val = feature_vals[j];
+
+            Vec3f diff = their_val - my_val;
+
+            float difference = diff[0]*diff[0] + diff[1]*diff[1] + diff[2]*diff[2];
+
+            difference = sqrtf(difference);
+
+            if(difference < minimum_difference)
+            {
+                minimum_difference = difference;
+                minimum_num = j;
+            }
+        }
+
+        assert(minimum_num != -1);
+
+        printf("Feature %i classified as image %s\n", i, images[inverse_feature_vals[minimum_num]].c_str());
+    }
+
+
+
+    //Vec3f sum_val = get_sum_val(mat, 0);
 
 #ifdef RETARD
     imwrite( "I literally hate opencv.png", mat );
