@@ -26,6 +26,14 @@
 using namespace cv;
 using namespace std;
 
+enum state
+{
+    OPEN = 0,
+    CLOSED = 1,
+    TONGUE = 2,
+    SUNGLASSES = 3
+};
+
 string base = "jamesimages/";
 
 struct bounding
@@ -120,6 +128,17 @@ Vec3f get_sum_val(Mat& mat, int type)
     return sum / num;
 }
 
+int mapEmoji(state eye1, state eye2, state mouth)
+{
+    // switch(mouth)
+    // {
+    //     case OPEN:
+    //     case CLOSED:
+    //     case TONGUE:
+    //     default:
+    // }
+}
+
 void GetReccct(Mat img, bounding b)
 {
     rectangle(img, Point(b.x,b.y), Point(b.x+b.width,b.y+b.height), Scalar(0,0,0), 2, 8, 0);
@@ -160,7 +179,7 @@ int main(int argc, const char **argv)
     GetReccct(mat,boundings[1]);
     GetReccct(mat,boundings[2]);
 
-    face_features feat;
+    // face_features feat;
 
     for(int i=0; i<FEATURES; i++)
     {
