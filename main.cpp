@@ -33,9 +33,12 @@ struct bounding
     int x, y, width, height;
 };
 
-bounding eyeLeftRect = {EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
-         eyeRightRect = {EYE_BOX_RIGHT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
-         mouthRect = {MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT};
+vector<bounding> boundings =
+{
+    {EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
+    {EYE_BOX_RIGHT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT},
+    {MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT}
+};
 
 vector<string> images =
 {
@@ -63,7 +66,7 @@ Mat get_matrix(int image)
     return mat;
 }
 
-Vec3f get_sum_val(Mat& mat)
+Vec3f get_sum_val(Mat& mat, int type)
 {
     Vec3f sum = 0;
 
@@ -95,11 +98,11 @@ int main(int argc, const char **argv)
 
     Mat mat = get_matrix(3);
 
-    GetReccct(mat,eyeLeftRect);
-    GetReccct(mat,eyeRightRect);
-    GetReccct(mat,mouthRect);
+    GetReccct(mat,boundings[0]);
+    GetReccct(mat,boundings[1]);
+    GetReccct(mat,boundings[2]);
 
-    Vec3f sum_val = get_sum_val(mat);
+    Vec3f sum_val = get_sum_val(mat, 0);
 
 #ifdef RETARD
     imwrite( "I literally hate opencv.png", mat );
