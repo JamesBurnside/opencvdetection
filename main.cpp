@@ -34,6 +34,11 @@ enum state
     SUNGLASSES = 3
 };
 
+enum emoji
+{
+    E_SMILE,E_SUPER_SMILE,E_TONGUE,E_WINK,E_SUPER_WINK,E_TONGUE_WINK,E_SUNGLASSES
+}
+
 string base = "jamesimages/";
 
 struct bounding
@@ -130,15 +135,15 @@ Vec3f get_sum_val(Mat& mat, int type)
     return sum / num;
 }
 
-int mapEmoji(state eye1, state eye2, state mouth)
+emoji mapEmoji(state eye1, state eye2, state mouth)
 {
-    // switch(mouth)
-    // {
-    //     case OPEN:
-    //     case CLOSED:
-    //     case TONGUE:
-    //     default:
-    // }
+    switch(mouth)
+    {
+        case OPEN:
+        case CLOSED:
+        case TONGUE:
+        default:
+    }
 }
 
 void GetReccct(Mat img, bounding b)
