@@ -12,11 +12,30 @@
 #include <utility>
 #include <math.h>
 
+
+#define MOUTH_BOX_WIDTH 200
+#define MOUTH_BOX_HEIGHT 160
+
+#define MOUTH_BOX_X 400
+#define MOUTH_BOX_Y 780
+
+
 using namespace cv;
 using namespace std;
 
 string base = "jamesimages/";
 
+struct bounding
+{
+    int x, y, width, height;
+};
+
+vector<bounding> bounds =
+{
+    {
+        MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT
+    }
+};
 
 vector<string> images =
 {
@@ -28,12 +47,6 @@ vector<string> images =
     "wink_smile.jpg",
     "wink_smile_super.jpg"
 };
-
-#define MOUTH_BOX_WIDTH 200
-#define MOUTH_BOX_HEIGHT 160
-
-#define MOUTH_BOX_X 400
-#define MOUTH_BOX_Y 780
 
 int main(int argc, const char **argv)
 {
@@ -55,6 +68,8 @@ int main(int argc, const char **argv)
 
     //draw bounding box:
     rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
+
+
 
 
 #ifdef RETARD
