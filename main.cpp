@@ -45,7 +45,7 @@ int main(int argc, const char **argv)
     }
 
     Mat mat;
-    mat = imread(images[0], CV_LOAD_IMAGE_COLOR);
+    mat = imread(images[3], CV_LOAD_IMAGE_COLOR);
 
     if(!mat.data)
     {
@@ -53,8 +53,16 @@ int main(int argc, const char **argv)
         exit(1);
     }
 
-    //namedWindow( "Display window", WINDOW_AUTOSIZE );
+    //draw bounding box:
+    rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
 
+
+#ifdef RETARD
     imwrite( "I literally hate opencv.png", mat );
+#else
+    namedWindow( "Display window", WINDOW_AUTOSIZE );
+    imshow( "Display window", mat );
+    getchar();
+#endif
 }
 
