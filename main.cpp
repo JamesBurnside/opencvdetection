@@ -34,6 +34,12 @@ enum state
     SUNGLASSES = 3
 };
 
+enum feature_type
+{
+    EYES,
+    MOUTH
+};
+
 string base = "jamesimages/";
 
 struct bounding
@@ -79,20 +85,24 @@ vector<Vec3f> feature_vals =
     0
 };
 
-enum feature_type
+vector<state> feature_states =
 {
-    MOUTH,
-    TONGUE
-};
+    OPEN,
+    CLOSED,
+    CLOSED,
+    TONGUE,
+    OPEN,
+    SUNGLASSES
+}
 
 vector<int> types =
 {
+    EYES,
+    EYES,
     MOUTH,
     MOUTH,
-    TONGUE,
-    TONGUE,
-    TONGUE,
-    MOUTH
+    MOUTH,
+    EYES
 };
 
 Mat get_matrix(int image)
@@ -185,6 +195,8 @@ int main(int argc, const char **argv)
     GetReccct(mat,boundings[1]);
     GetReccct(mat,boundings[2]);
 
+    int feature_nums[FEATURES] = {0};
+
     for(int i=0; i<FEATURES; i++)
     {
         Vec3f feat = get_sum_val(mat, i);
@@ -224,6 +236,8 @@ int main(int argc, const char **argv)
         assert(minimum_num != -1);
 
         printf("Feature %i classified as image %s\n", i, images[inverse_feature_vals[minimum_num]].c_str());
+
+        feature_nums[i] = minimum_num;
     }
 
 
