@@ -20,6 +20,9 @@ int main(int argc, const char **argv)
     printf("helloworld");
 
     Mat mat;
-    mat.create(10, 10, CV_32FC1);
+    mat = imread("img.png", CV_LOAD_IMAGE_COLOR);
+
+    namedWindow( "Display window", WINDOW_AUTOSIZE );
+    imshow( "Display window", image );
 }
 
