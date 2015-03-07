@@ -19,10 +19,9 @@
 
 #define EYE_BOX_WIDTH 130
 #define EYE_BOX_HEIGHT 90
-#define EYE_BOX_LEFT_X 590
-#define EYE_BOX_LEFT_Y 330
-#define EYE_BOX_RIGHT_X 545
-#define EYE_BOX_RIGHT_Y 580
+#define EYE_BOX_LEFT_X 330
+#define EYE_BOX_RIGHT_X 540
+#define EYE_BOX_Y 565 
 
 using namespace cv;
 using namespace std;
@@ -34,7 +33,9 @@ struct bounding
     int x, y, width, height;
 };
 
-bounding eyeLeftRect = {EYE_BOX_LEFT_X, EYE_BOX_LEFT_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT}, eyeRightRect, mouthRect;
+bounding eyeLeftRect = {EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT}, 
+         eyeRightRect = {EYE_BOX_RIGHT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT}, 
+         mouthRect = {MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT};
 
 vector<string> images =
 {
@@ -62,7 +63,7 @@ int main(int argc, const char **argv)
     }
 
     Mat mat;
-    mat = imread(images[3], CV_LOAD_IMAGE_COLOR);
+    mat = imread(images[1], CV_LOAD_IMAGE_COLOR);
 
     if(!mat.data)
     {
@@ -70,12 +71,9 @@ int main(int argc, const char **argv)
         exit(1);
     }
 
-    //mouth bounding box:
-    rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
-
-    //eyes bounding box:
-    rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
-    rectangle(mat, Point(MOUTH_BOX_X,MOUTH_BOX_Y), Point(MOUTH_BOX_X+MOUTH_BOX_WIDTH, MOUTH_BOX_Y+MOUTH_BOX_HEIGHT),Scalar(0,0,0) ,2,8,0);
+    GetReccct(mat,eyeLeftRect);
+    GetReccct(mat,eyeRightRect);
+    GetReccct(mat,mouthRect);
 
 
 
