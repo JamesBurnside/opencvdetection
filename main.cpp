@@ -15,14 +15,42 @@
 using namespace cv;
 using namespace std;
 
+string base = "jamesimages/";
+
+
+vector<string> images =
+{
+    "smile.jpg",
+    "smile_super.jpg",
+    "sunglasses.jpg",
+    "tongue.jpg",
+    "tongue_wink.jpg",
+    "wink_smile.jpg",
+    "wink_smile_super.jpg"
+};
+
 int main(int argc, const char **argv)
 {
     printf("helloworld");
 
-    Mat mat;
-    mat = imread("img.png", CV_LOAD_IMAGE_COLOR);
+    for(auto& i : images)
+    {
+        i = base + i;
+    }
 
-    namedWindow( "Display window", WINDOW_AUTOSIZE );
-    imshow( "Display window", image );
+    Mat mat;
+    mat = imread(images[0], CV_LOAD_IMAGE_COLOR);
+
+    if(!mat.data)
+    {
+        cout << "whoops";
+        exit(1);
+    }
+
+    //namedWindow( "Display window", WINDOW_AUTOSIZE );
+
+    imshow( "Display window", mat );
+
+    getchar();
 }
 
