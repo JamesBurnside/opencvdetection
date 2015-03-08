@@ -227,7 +227,7 @@ emoji mapEmoji(int features[3])
             return E_SUNGLASSES;
         }
     }
-    
+
     assert(false); //how'd we even get here??
     return E_NONE;
 }
@@ -260,6 +260,12 @@ int main(int argc, const char **argv)
     feature_vals[2] = get_sum_val(image_mat[5], 2);
     feature_vals[3] = get_sum_val(image_mat[3], 2);
     feature_vals[4] = get_sum_val(image_mat[1], 2);
+
+    for(int i=0; i<feature_vals.size(); i++)
+    {
+        printf("%f %f %f\n", feature_vals[i][0], feature_vals[i][1], feature_vals[i][2]);
+    }
+
     //feature_vals[5] =
 
     Mat mat = get_matrix(4);
